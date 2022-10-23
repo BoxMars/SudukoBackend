@@ -1,3 +1,17 @@
-from django.test import TestCase
+import jwt
+import time
 
-# Create your tests here.
+salt = "asgfdgerher"
+exp = time.time() + 1
+payload = {
+  "name": "dawsonenjoy",
+  "exp": exp
+}
+
+token = jwt.encode(payload=payload, key=salt, algorithm='HS256')
+
+print(token)
+time.sleep(2)
+
+info = jwt.decode(token, salt, algorithms=['HS256'])
+print(info)
