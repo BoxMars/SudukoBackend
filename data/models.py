@@ -12,7 +12,7 @@ class Paper(models.Model):
     def info(self):
         res = {
             'uid': self.uid,
-            'content': self.uid,
+            'content': self.content,
         }
         return res
 
