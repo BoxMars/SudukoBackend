@@ -33,7 +33,7 @@ def sign_in(request):
     jet_content = {
         'name': name,
         'phone': phone,
-        'id': user_list.first().uid,
+        'id': user_list.first().phone,
         "exp": time.time() + 7 * 24 * 60 * 60
     }
     key = '1234'
