@@ -45,6 +45,7 @@ def sign_in(request):
     return response
 
 def get_user(request):
+    print(request.COOKIES)
     jwt_content = request.COOKIES['account']
     key = '1234'
     try:
