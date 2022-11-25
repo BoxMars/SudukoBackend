@@ -23,8 +23,8 @@ def generate_response(data, code):
 
 
 def sign_in(request):
-    name = request.POST.get('name',"")
-    phone = request.POST.get('phone',"")
+    name = request.POST['name']
+    phone = request.POST['phone']
 
     user_list = models.User.objects.filter(name=name, phone=phone)
     if len(user_list) == 0:
@@ -96,8 +96,8 @@ def submit_paper(request):
 
     enrollment=enrollment.first()
 
-    paper1=request.POST.get('paper1',"")
-    paper2=request.POST.get('paper2',"")
+    paper1=request.POST['paper1']
+    paper2=request.POST['paper2']
 
     enrollment.paper1_answer=paper1
     enrollment.paper2_answer=paper2
