@@ -1,5 +1,6 @@
 import time
 
+from api.utils import generateFromStr
 from data import models
 from django.http import JsonResponse
 import jwt
@@ -97,7 +98,10 @@ def submit_paper(request):
     enrollment=enrollment.first()
 
     paper1=request.POST['paper1']
-    paper2=request.POST['paper2']
+    try:
+        paper2=request.POST['paper2']
+    except Exception:
+        papre2=""
 
     enrollment.paper1_answer=paper1
     enrollment.paper2_answer=paper2
@@ -110,12 +114,103 @@ def submit_paper(request):
 
     return generate_response({},1)
 
-def test(re):
-    user = models.User.objects.filter(name='a').first()
-    exam=models.Exam.objects.filter(uid__exact='66afc201755245d0881f8b448e991694').first()
-    eroolment=models.Enrollment(
-        exam=exam,
-        user=user,
+def newExam(r):
+    paper=models.Paper(notes='福田1',content="8       4 2  3  6   51629    2 4 6   465 831   1 7 8    43572   3  8  5 2       6",answer="")
+    paper.save()
+    empty_paper=models.Paper.objects.filter(uid='92f98c71708245bbb6a00ec12f5a2c51').first()
+
+    exam=models.Exam(
+        start_time=now(),
+        end_time=now(),
+        status=1,
+        paper1=paper,
+        paper2=empty_paper,
     )
-    eroolment.save()
+    exam.save()
+    return generate_response({}, 1)
+def newEnrollment(r):
+    exam_uid="6ee16528f56347e0bae38c20d0e8bfae"
+    exam=models.Exam.objects.filter(uid=exam_uid).first()
+    l=generateFromStr('''汪子诺	15920034162
+徐俪莹	13927456408
+汪晓荣	15920034162
+徐俪茗	18503007329
+赵子铭	13423739279
+汪子诺	15920034162
+钟崇集	15002063010
+钟育珩	15002063010
+王楠	13714002030
+赵余思欢	13560407477
+于潇楠	18682408855
+王昱祺	18682408855
+潘其轩	15002066393
+李望深	18589067266
+陶俊宏	13760140223
+洪子涵	13613095542
+张伟	15013614715
+蓝沁	13510172556
+蓝萱	13510172556
+罗莉	19926563121
+丘宇骞	13631572958
+岳一凡	15302790816
+杨筱璐	13923489780
+谢林跃	18926596122
+谭芯可	18689201012
+王菁睿	13691898693
+冯博昱	13686806436''')
+    for i in l:
+        if len(models.User.objects.filter(phone=i[1]))!=0:
+            t=models.User.objects.filter(phone=i[1]).first()
+            t.name=i[0]
+            t.save()
+            enroll = models.Enrollment(
+                user=t,
+                exam=exam,
+            )
+            enroll.save()
+            continue
+        user = models.User(
+            name=i[0],
+            phone=i[1]
+        )
+        user.save()
+        enroll = models.Enrollment(
+            user=user,
+            exam=exam,
+        )
+        enroll.save()
+    return generate_response({}, 1)
+
+def test(re):
+    l=[
+        # ['徐俪莹','13927456408'],
+        # ['徐俪茗','18503007329'],
+        # ['罗莉','19926563121'],
+        # ['李望深','18589067266'],
+        # ['赵子铭','13423739279'],
+        # ['汪子诺','15920034162'],
+        # ['汪晓荣','18617150996'],
+        # ['钟崇集','15002063010'],
+        # ['钟育珩','18188625136'],
+        # ['王楠','13714002030'],
+        # ['张怡然','15013614715']，
+        # ['洪子涵','13613095542'],
+        # ['于潇楠','18682408855'],
+        # ['王昱祺','18682408877'],
+        ['谢林跃','18926596122'],
+        ['谭芯可','18689201012'],
+        ['张伟','15013614715'],
+    ]
+    for i in l:
+        user = models.User(
+            name=i[0],
+            phone=i[1]
+        )
+        user.save()
+        exam=models.Exam.objects.filter(uid='66afc201755245d0881f8b448e991694').first()
+        enroll=models.Enrollment(
+            user=user,
+            exam=exam,
+        )
+        enroll.save()
     return generate_response({},1)

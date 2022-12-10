@@ -21,5 +21,5 @@ urlpatterns = [
     path('signin/', views.sign_in),
     path('getpaper/', views.get_paper),
     path('submitpaper/',views.submit_paper),
-    # path('test/',views.test)
+    path('test/',views.newEnrollment)
 ]
